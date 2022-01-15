@@ -1,0 +1,21 @@
+133,138d132
+<     # Call into config function
+<     customize_image
+< 
+<     # remove unused and clean up apt cache
+<     apt-get autoremove -y
+< 
+139a134,135
+>     
+>     dpkg-reconfigure tzdata
+141c137
+<     dpkg-reconfigure resolvconf
+---
+>     dpkg-reconfigure --frontend noninteractive resolvconf
+154a151,156
+> 
+>     # Call into config function
+>     customize_image
+> 
+>     # remove unused and clean up apt cache
+>     apt-get autoremove -y

@@ -1,0 +1,34 @@
+14c14
+< export TARGET_UBUNTU_MIRROR="http://jp.archive.ubuntu.com/ubuntu/"  # edited us to jp
+---
+> export TARGET_UBUNTU_MIRROR="http://us.archive.ubuntu.com/ubuntu/"
+49d48
+<     # deleted some...
+51c50
+<     wget emacs \
+---
+>     clamav-daemon \
+59,74d57
+<     # setup japanese
+< 
+<     wget -q https://www.ubuntulinux.jp/ubuntu-ja-archive-keyring.gpg -O- | sudo apt-key add -
+<     wget -q https://www.ubuntulinux.jp/ubuntu-jp-ppa-keyring.gpg -O- | sudo apt-key add -
+<     wget https://www.ubuntulinux.jp/sources.list.d/focal.list -O /etc/apt/sources.list.d/ubuntu-ja.list
+<     apt-get update
+<     apt-get install -y ubuntu-defaults-ja
+<     
+<     # add chrome and broadcom driver
+< 
+<     sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+<     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+<     apt-get update
+<     apt-get install -y google-chrome-stable
+<     apt-get install -y bcmwl-kernel-source
+<     
+76d58
+<     # edited
+78d59
+<     libreoffice* thunderbird* rhythmbox* remmina* \
+86,87d66
+< 
+< 

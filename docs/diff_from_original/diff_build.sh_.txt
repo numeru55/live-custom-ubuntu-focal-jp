@@ -1,0 +1,3 @@
+270,271d269
+< 	-appended_part_as_gpt  \
+< 	--mbr-force-bootable  \
