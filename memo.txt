@@ -1,0 +1,5 @@
+load_config ... default_config.shを読む
+check_host ... LC_ALL=Cなど
+setup_host ... apt設定 machine-id initctlなど
+install_pkg
+finish_up
