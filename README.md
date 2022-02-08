@@ -1,6 +1,7 @@
 # Thanks to
 
-https://github.com/mvallim/live-custom-ubuntu-from-scratch
+- https://github.com/mvallim/live-custom-ubuntu-from-scratch
+- https://github.com/jkbys/ubuntu-ja-remix
 
 # Overview
 
@@ -12,12 +13,6 @@ Includes Broadcom WiFi driver and my favorite package for my MacBook.
 
 ```sh
 sudo ./build.sh # "focal.iso" will be created.
-```
-
-Before build again, clean working directory:
-
-```sh
-sudo rm -rf root image focal.iso
 ```
 
 # Bug

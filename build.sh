@@ -1,14 +1,7 @@
 #!/bin/bash
 
-MY_HOST_NAME="focal"
-
 TARGET_UBUNTU_VERSION="focal"
 TARGET_UBUNTU_MIRROR="http://jp.archive.ubuntu.com/ubuntu/"
-
-# OPTION: for new user creation. Uncomment "adduser" in chroot.
-
-# TARGET_USER_NAME="ubuntu"
-# TARGET_USER_PASSWORD="custom"
 
 TIMEZONE="Asia/Tokyo"
 ZONEINFO_FILE="/usr/share/zoneinfo/Asia/Tokyo"
@@ -35,14 +28,16 @@ apt install -y binutils debootstrap squashfs-tools xorriso grub-pc-bin grub-efi-
 # remove directories
 
 log "Removing previously created directories ..."
-rm -rf root/
+rm -rf root image *.iso
 log "Done."
 
 # install base
 
 log "Execute debootstrap..."
 mkdir root
-debootstrap --arch=amd64 --variant=minbase focal root
+# debootstrap --arch=amd64 --variant=minbase focal root
+debootstrap --arch=amd64 --variant=minbase $TARGET_UBUNTU_VERSION root $TARGET_UBUNTU_MIRROR
+
 log "Done."
 
 # prepare chroot
@@ -62,8 +57,7 @@ deb $TARGET_UBUNTU_MIRROR $TARGET_UBUNTU_VERSION-updates main restricted univers
 deb-src $TARGET_UBUNTU_MIRROR $TARGET_UBUNTU_VERSION-updates main restricted universe multiverse
 EOF
 
-
-echo $MY_HOST_NAME > root/etc/hostname
+# echo $TARGET_UBUNTU_VERSION > root/etc/hostname
 
 mount --bind /dev root/dev
 mount --bind /run root/run
@@ -71,10 +65,6 @@ mount --bind /run root/run
 chroot root mount none -t proc /proc
 chroot root mount none -t sysfs /sys
 chroot root mount none -t devpts /dev/pts
-
-chroot root mkdir -p /boot/efi
-chroot root mount ${TARGET_DISK}1 /boot/efi
-chroot root rm -rf /boot/efi/*
 
 log "Done."
 
@@ -202,11 +192,11 @@ umount root/run
 
 # /etc/hosts
 
-log "edit /etc/hosts..."
+# log "edit /etc/hosts..."
 
-cat <<EOF >>root/etc/hosts
-127.0.1.1 $MY_HOST_NAME
-EOF
+# cat <<EOF >>root/etc/hosts
+# 127.0.1.1 $TARGET_UBUNTU_VERSION
+# EOF
 
 # keyboard to jp
 
@@ -240,7 +230,7 @@ insmod all_video
 set default="0"
 set timeout=10
 
-menuentry "${MY_HOST_NAME}" {
+menuentry "${TARGET_UBUNTU_VERSION}" {
    linux /casper/vmlinuz boot=casper nopersistent toram quiet splash ---
    initrd /casper/initrd
 }
@@ -277,7 +267,7 @@ printf $(du -sx --block-size=1 root | cut -f1) > image/casper/filesystem.size
 
     # create diskdefines
 cat <<EOF > image/README.diskdefines
-#define DISKNAME  ${MY_HOST_NAME}
+#define DISKNAME  ${TARGET_UBUNTU_VERSION}
 #define TYPE  binary
 #define TYPEbinary  1
 #define ARCH  amd64
@@ -322,7 +312,7 @@ pushd image
         -as mkisofs \
         -iso-level 3 \
         -full-iso9660-filenames \
-        -volid "$MY_HOST_NAME" \
+        -volid "$TARGET_UBUNTU_VERSION" \
         -eltorito-boot boot/grub/bios.img \
         -no-emul-boot \
         -boot-load-size 4 \
@@ -336,7 +326,7 @@ pushd image
         -append_partition 2 0xef isolinux/efiboot.img \
 	-appended_part_as_gpt  \
 	--mbr-force-bootable  \
-        -output "../$MY_HOST_NAME.iso" \
+        -output "../$TARGET_UBUNTU_VERSION.iso" \
         -m "isolinux/efiboot.img" \
         -m "isolinux/bios.img" \
         -graft-points \
