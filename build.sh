@@ -162,7 +162,30 @@ wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
 apt-get update
 apt-get install -y google-chrome-stable
 apt-get install -y bcmwl-kernel-source
-apt-get install -y emacs vim bat
+apt-get install -y vim bat
+
+apt-get install -y emacs
+
+cat <<EOF >/etc/skel/.emacs
+(set-language-environment 'Japanese) 
+(prefer-coding-system 'utf-8) 
+
+;; inhibit startup message 
+(setq inhibit-startup-message t) 
+
+;; stop cursor blink
+(blink-cursor-mode 0) 
+
+;; don't show tool bar
+(tool-bar-mode -1) 
+
+
+;; don't make backup
+
+(setq make-backup-files nil) 
+(setq auto-save-default nil) 
+
+EOF
 
 apt-add-repository ppa:fish-shell/release-3
 apt-get update
